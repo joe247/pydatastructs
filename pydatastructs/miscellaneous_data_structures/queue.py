@@ -85,10 +85,7 @@ class ArrayQueue(Queue):
             items = DynamicOneDimensionalArray(dtype, items)
         obj = object.__new__(cls)
         obj.items, obj.front = items, -1
-        if items.size == 0:
-            obj.front = -1
-        else:
-            obj.front = 0
+        obj.front = -1 if items.size == 0 else 0
         return obj
 
     @classmethod
@@ -107,11 +104,10 @@ class ArrayQueue(Queue):
             raise IndexError("Queue is empty.")
         return_value = dc(self.items[self.front])
         front_temp = self.front
-        if self.front == self.rear:
+        if front_temp == self.rear:
             self.front = -1
         else:
-            if (self.items._num - 1)/self.items._size < \
-                self.items._load_factor:
+            if (self.items._num - 1) / self.items._size < self.items._load_factor:
                 self.front = 0
             else:
                 self.front += 1
@@ -130,9 +126,7 @@ class ArrayQueue(Queue):
         return self.items._num
 
     def __str__(self):
-        _data = []
-        for i in range(self.front, self.rear + 1):
-            _data.append(self.items._data[i])
+        _data = [self.items._data[i] for i in range(self.front, self.rear + 1)]
         return str(_data)
 
 
@@ -163,8 +157,7 @@ class LinkedListQueue(Queue):
     def popleft(self):
         if self.is_empty:
             raise IndexError("Queue is empty.")
-        return_value = self.queue.popleft()
-        return return_value
+        return self.queue.popleft()
 
     @property
     def is_empty(self):

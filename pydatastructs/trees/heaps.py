@@ -262,8 +262,7 @@ class BinaryHeap(DHeap):
     .. [1] https://en.m.wikipedia.org/wiki/Binary_heap
     """
     def __new__(cls, elements=None, heap_property="min"):
-        obj = DHeap.__new__(cls, elements, heap_property, 2)
-        return obj
+        return DHeap.__new__(cls, elements, heap_property, 2)
 
     @classmethod
     def methods(cls):
@@ -326,8 +325,7 @@ class TernaryHeap(DHeap):
     .. [2] https://ece.uwaterloo.ca/~dwharder/aads/Algorithms/d-ary_heaps/Ternary_heaps/
     """
     def __new__(cls, elements=None, heap_property="min"):
-        obj = DHeap.__new__(cls, elements, heap_property, 3)
-        return obj
+        return DHeap.__new__(cls, elements, heap_property, 3)
 
     @classmethod
     def methods(cls):
@@ -391,8 +389,9 @@ class BinomialHeap(Heap):
 
         tree2: BinomialTree
         """
-        if (not _check_type(tree1, BinomialTree)) or \
-            (not _check_type(tree2, BinomialTree)):
+        if not (
+            _check_type(tree1, BinomialTree) and _check_type(tree2, BinomialTree)
+        ):
             raise TypeError("Both the trees should be of type "
                             "BinomalTree.")
         ret_value = None
@@ -503,10 +502,12 @@ class BinomialHeap(Heap):
         Deletes the node with minimum key.
         """
         min_node, min_idx = self.find_minimum(get_index=True)
-        child_root_list = []
-        for k, child in enumerate(min_node.children):
-            if child is not None:
-                child_root_list.append(BinomialTree(root=child, order=k))
+        child_root_list = [
+            BinomialTree(root=child, order=k)
+            for k, child in enumerate(min_node.children)
+            if child is not None
+        ]
+
         self.root_list.remove(self.root_list[min_idx])
         child_heap = BinomialHeap(root_list=child_root_list)
         self.merge(child_heap)

@@ -35,11 +35,10 @@ class BinomialTree(object):
     __slots__ = ['root', 'order']
 
     def __new__(cls, root=None, order=None):
-        if root is not None and \
-            not _check_type(root, BinomialTreeNode):
+        if not (root is None or _check_type(root, BinomialTreeNode)):
             raise TypeError("%s i.e., root should be of "
                              "type BinomialTreeNode."%(root))
-        if order is not None and not _check_type(order, int):
+        if not (order is None or _check_type(order, int)):
             raise TypeError("%s i.e., order should be of "
                              "type int."%(order))
         obj = object.__new__(cls)

@@ -258,7 +258,7 @@ class BinarySearchTree(BinaryTree):
             if self.tree[walk].key == key:
                 break
             parent = walk
-            if self.comparator(key, self.tree[walk].key):
+            if self.comparator(key, self.tree[parent].key):
                 walk = self.tree[walk].left
             else:
                 walk = self.tree[walk].right
@@ -473,7 +473,7 @@ class BinarySearchTree(BinaryTree):
         root = self.root_idx
         path1 = self._simple_path(j, root)
         path2 = self._simple_path(k, root)
-        if not path1 or not path2:
+        if not (path1 and path2):
             raise ValueError("One of two path doesn't exists. See %s, %s"
                              %(path1, path2))
 
@@ -505,7 +505,7 @@ class BinarySearchTree(BinaryTree):
             else:
                 curr_root = self.tree[curr_root].right
 
-            if curr_root == u or curr_root == v:
+            if curr_root in [u, v]:
                 if curr_root is None:
                     return None
                 return self.tree[curr_root].key
@@ -834,8 +834,7 @@ class SplayTree(SelfBalancingBinaryTree):
         if e is None:
             return
         self.splay(e, p)
-        status = super(SelfBalancingBinaryTree, self).delete(x)
-        return status
+        return super(SelfBalancingBinaryTree, self).delete(x)
 
     def join(self, other):
         """
@@ -901,8 +900,8 @@ class SplayTree(SelfBalancingBinaryTree):
         if self.tree[self.root_idx].right is not None:
             traverse = BinaryTreeTraversal(self)
             elements = traverse.depth_first_search(order='pre_order', node=self.tree[self.root_idx].right)
-            for i in range(len(elements)):
-                super(SelfBalancingBinaryTree, other).insert(elements[i].key, elements[i].data)
+            for element in elements:
+                super(SelfBalancingBinaryTree, other).insert(element.key, element.data)
             for j in range(len(elements) - 1, -1, -1):
                 e, p = super(SelfBalancingBinaryTree, self).search(elements[j].key, parent=True)
                 self.tree[e] = None
@@ -991,7 +990,7 @@ class BinaryTreeTraversal(object):
         visit = []
         tree, size = self.tree.tree, self.tree.size
         s = Stack()
-        while not s.is_empty or node is not None:
+        while not (s.is_empty and node is None):
             if node is not None:
                 s.push(node)
                 node = tree[node].left
@@ -1165,16 +1164,12 @@ class BinaryIndexedTree(object):
         _index, _value = index, value
         if self.flag[index] == 0:
             self.flag[index] = 1
-            index += 1
-            while index < self.array._size + 1:
-                self.tree[index] += value
-                index = index + (index & (-index))
         else:
             value = value - self.array[index]
-            index += 1
-            while index < self.array._size + 1:
-                self.tree[index] += value
-                index = index + (index & (-index))
+        index += 1
+        while index < self.array._size + 1:
+            self.tree[index] += value
+            index = index + (index & (-index))
         self.array[_index] = _value
 
     def get_prefix_sum(self, index):

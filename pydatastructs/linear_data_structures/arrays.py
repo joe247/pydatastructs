@@ -296,24 +296,24 @@ class ArrayForTrees(DynamicOneDimensionalArray):
     pydatastructs.linear_data_structures.arrays.DynamicOneDimensionalArray
     """
     def _modify(self):
-        if self._num/self._size < self._load_factor:
-            new_indices = dict()
-            arr_new = OneDimensionalArray(self._dtype, 2*self._num + 1)
-            j = 0
-            for i in range(self._last_pos_filled + 1):
-                if self[i] is not None:
-                    arr_new[j] = self[i]
-                    new_indices[self[i].key] = j
-                    j += 1
-            for i in range(j):
-                if arr_new[i].left is not None:
-                    arr_new[i].left = new_indices[self[arr_new[i].left].key]
-                if arr_new[i].right is not None:
-                    arr_new[i].right = new_indices[self[arr_new[i].right].key]
-                if arr_new[i].parent is not None:
-                    arr_new[i].parent = new_indices[self[arr_new[i].parent].key]
-            self._last_pos_filled = j - 1
-            self._data = arr_new._data
-            self._size = arr_new._size
-            return new_indices
-        return None
+        if self._num / self._size >= self._load_factor:
+            return None
+        new_indices = {}
+        arr_new = OneDimensionalArray(self._dtype, 2*self._num + 1)
+        j = 0
+        for i in range(self._last_pos_filled + 1):
+            if self[i] is not None:
+                arr_new[j] = self[i]
+                new_indices[self[i].key] = j
+                j += 1
+        for i in range(j):
+            if arr_new[i].left is not None:
+                arr_new[i].left = new_indices[self[arr_new[i].left].key]
+            if arr_new[i].right is not None:
+                arr_new[i].right = new_indices[self[arr_new[i].right].key]
+            if arr_new[i].parent is not None:
+                arr_new[i].parent = new_indices[self[arr_new[i].parent].key]
+        self._last_pos_filled = j - 1
+        self._data = arr_new._data
+        self._size = arr_new._size
+        return new_indices

@@ -35,7 +35,7 @@ def test_DoublyLinkedList():
         else:
             dll.popright()
     assert str(dll) == "[]"
-    for _ in range(len(dll_copy)):
+    for item in dll_copy:
         index = random.randint(0, len(dll_copy) - 1)
         dll_copy.extract(index)
     assert str(dll_copy) == "[]"
@@ -70,7 +70,7 @@ def test_SinglyLinkedList():
         else:
             sll.popright()
     assert str(sll) == "[]"
-    for _ in range(len(sll_copy)):
+    for item in sll_copy:
         index = random.randint(0, len(sll_copy) - 1)
         sll_copy.extract(index)
     assert str(sll_copy) == "[]"
@@ -106,7 +106,7 @@ def test_SinglyCircularLinkedList():
         else:
             scll.popright()
     assert str(scll) == "[]"
-    for _ in range(len(scll_copy)):
+    for item in scll_copy:
         index = random.randint(0, len(scll_copy) - 1)
         scll_copy.extract(index)
     assert str(scll_copy) == "[]"
@@ -143,7 +143,7 @@ def test_DoublyCircularLinkedList():
         else:
             dcll.popright()
     assert str(dcll) == "[]"
-    for _ in range(len(dcll_copy)):
+    for item in dcll_copy:
         index = random.randint(0, len(dcll_copy) - 1)
         dcll_copy.extract(index)
     assert str(dcll_copy) == "[]"

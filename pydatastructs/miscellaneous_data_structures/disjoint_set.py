@@ -27,7 +27,7 @@ class DisjointSetForest(object):
 
     def __new__(cls):
         obj = object.__new__(cls)
-        obj.tree = dict()
+        obj.tree = {}
         return obj
 
     @classmethod

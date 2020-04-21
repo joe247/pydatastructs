@@ -20,10 +20,10 @@ class AdjacencyMatrix(Graph):
         obj.vertices = [vertex.name for vertex in vertices]
         for vertex in vertices:
             obj.__setattr__(vertex.name, vertex)
-        obj.matrix = dict()
+        obj.matrix = {}
         for vertex in vertices:
-            obj.matrix[vertex.name] = dict()
-        obj.edge_weights = dict()
+            obj.matrix[vertex.name] = {}
+        obj.edge_weights = {}
         return obj
 
     @classmethod
