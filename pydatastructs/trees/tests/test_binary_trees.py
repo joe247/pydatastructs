@@ -265,15 +265,13 @@ def test_AVLTree():
     assert raises(ValueError, lambda: a5.select(15))
     assert a5.rank(-1) is None
     def test_select_rank(expected_output):
-        output = []
-        for i in range(len(expected_output)):
-            output.append(a5.select(i + 1).key)
+        output = [a5.select(i + 1).key for i in range(len(expected_output))]
         assert output == expected_output
 
         output = []
         expected_ranks = [i + 1 for i in range(len(expected_output))]
-        for i in range(len(expected_output)):
-            output.append(a5.rank(expected_output[i]))
+        for item in expected_output:
+            output.append(a5.rank(item))
         assert output == expected_ranks
 
     test_select_rank([2, 3, 5, 9, 10, 11, 12, 13, 15, 17, 18, 20, 30, 33])
