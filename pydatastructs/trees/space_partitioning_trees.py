@@ -81,9 +81,7 @@ class OneDimensionalSegmentTree(object):
             c1 = (i1.key[3] and i2.key[0])
         if i2.key[2] == i1.key[1]:
             c2 = (i2.key[3] and i1.key[0])
-        if c1 is False and c2 is False:
-            return False
-        return True
+        return c1 is not False or c2 is not False
 
     def _contains(self, i1, i2):
         """
@@ -108,14 +106,8 @@ class OneDimensionalSegmentTree(object):
         stack. Used for imitating the stack based
         approach used in recursion.
         """
-        if self.tree[idx].right is None:
-            rc = None
-        else:
-            rc = self.tree[self.tree[idx].right]
-        if self.tree[idx].left is None:
-            lc = None
-        else:
-            lc = self.tree[self.tree[idx].left]
+        rc = None if self.tree[idx].right is None else self.tree[self.tree[idx].right]
+        lc = None if self.tree[idx].left is None else self.tree[self.tree[idx].left]
         if self._intersect(I, rc):
             calls.append(self.tree[idx].right)
         if self._intersect(I, lc):
@@ -226,9 +218,6 @@ class OneDimensionalSegmentTree(object):
             self.build()
         str_tree = []
         for seg in self.tree:
-            if seg.data is None:
-                data = None
-            else:
-                data = [str(sd) for sd in seg.data]
+            data = None if seg.data is None else [str(sd) for sd in seg.data]
             str_tree.append((seg.left, seg.key, data, seg.right))
         return str(str_tree)
