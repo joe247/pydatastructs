@@ -93,9 +93,9 @@ def merge_sort_parallel(array, num_threads, **kwargs):
     end = kwargs.get('end', len(array) - 1)
     comp = kwargs.get("comp", lambda u, v: u <= v)
     for size in range(floor(log(end - start + 1, 2)) + 1):
-        pow_2 = 2**size
         with ThreadPoolExecutor(max_workers=num_threads) as Executor:
             i = start
+            pow_2 = 2**size
             while i <= end:
                 Executor.submit(
                     _merge,
@@ -154,7 +154,7 @@ def brick_sort(array, **kwargs):
     comp = kwargs.get("comp", lambda u, v: u <= v)
 
     is_sorted = False
-    while is_sorted is False:
+    while not is_sorted:
         is_sorted = True
         for i in range(start+1, end, 2):
             if _comp(array[i+1], array[i], comp):
@@ -338,21 +338,21 @@ def counting_sort(array: Array) -> Array:
     """
     max_val, min_val = array[0], array[0]
     none_count = 0
-    for i in range(len(array)):
-        if array[i] is not None:
-            if max_val is None or max_val < array[i]:
-                max_val = array[i]
-            if min_val is None or array[i] < min_val:
-                min_val = array[i]
+    for item_ in array:
+        if item_ is not None:
+            if max_val is None or max_val < item_:
+                max_val = item_
+            if min_val is None or item_ < min_val:
+                min_val = item_
         else:
             none_count += 1
     if min_val is None or max_val is None:
         return array
 
     count = [0 for _ in range(max_val - min_val + 1)]
-    for i in range(len(array)):
-        if array[i] is not None:
-            count[array[i] - min_val] += 1
+    for item in array:
+        if item is not None:
+            count[item - min_val] += 1
 
     total = 0
     for i in range(max_val - min_val + 1):
@@ -373,10 +373,7 @@ def counting_sort(array: Array) -> Array:
     return output
 
 def _matrix_multiply_helper(m1, m2, row, col):
-    s = 0
-    for i in range(len(m1)):
-        s += m1[row][i] * m2[i][col]
-    return s
+    return sum(m1[row][i] * m2[i][col] for i in range(len(m1)))
 
 def matrix_multiply_parallel(matrix_1, matrix_2, num_threads):
     """
