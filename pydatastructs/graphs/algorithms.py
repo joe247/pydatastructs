@@ -85,7 +85,7 @@ def breadth_first_search(
 def _breadth_first_search_adjacency_list(
     graph, source_node, operation, *args, **kwargs):
     bfs_queue = Queue()
-    visited = dict()
+    visited = {}
     bfs_queue.append(source_node)
     visited[source_node] = True
     while len(bfs_queue) != 0:
@@ -202,8 +202,7 @@ def _breadth_first_search_parallel_adjacency_list(
 _breadth_first_search_parallel_adjacency_matrix = _breadth_first_search_parallel_adjacency_list
 
 def _generate_mst_object(graph):
-    mst = Graph(*[getattr(graph, str(v)) for v in graph.vertices])
-    return mst
+    return Graph(*[getattr(graph, str(v)) for v in graph.vertices])
 
 def _sort_edges(graph, num_threads=None):
     edges = list(graph.edge_weights.items())
@@ -233,7 +232,7 @@ _minimum_spanning_tree_kruskal_adjacency_matrix = \
 
 def _minimum_spanning_tree_prim_adjacency_list(graph):
     q = PriorityQueue(implementation='binomial_heap')
-    e = dict()
+    e = {}
     mst = Graph(implementation='adjacency_list')
     q.push(next(iter(graph.vertices)), 0)
     while not q.is_empty:
@@ -336,15 +335,12 @@ _minimum_spanning_tree_parallel_kruskal_adjacency_matrix = \
     _minimum_spanning_tree_parallel_kruskal_adjacency_list
 
 def _find_min(q, v, i):
-    if not q.is_empty:
-        v[i] = q.peek
-    else:
-        v[i] = None
+    v[i] = q.peek if not q.is_empty else None
 
 def _minimum_spanning_tree_parallel_prim_adjacency_list(graph, num_threads):
     q = [PriorityQueue(implementation='binomial_heap') for _ in range(num_threads)]
     e = [dict() for _ in range(num_threads)]
-    v2q = dict()
+    v2q = {}
     mst = Graph(implementation='adjacency_list')
 
     itr = iter(graph.vertices)
@@ -487,7 +483,7 @@ def _strongly_connected_components_kosaraju_adjacency_list(graph):
         if not visited.get(u, False):
             _visit(graph, u, visited, incoming, L)
 
-    assigned = dict()
+    assigned = {}
     components = []
     for i in range(-1, -len(L) - 1, -1):
         comp = set()
@@ -620,7 +616,7 @@ def depth_first_search(
 def _depth_first_search_adjacency_list(
     graph, source_node, operation, *args, **kwargs):
     dfs_stack = Stack()
-    visited = dict()
+    visited = {}
     dfs_stack.append(source_node)
     visited[source_node] = True
     while len(dfs_stack) != 0:
@@ -712,10 +708,9 @@ def _bellman_ford_adjacency_list(graph: Graph, source: str, target: str) -> tupl
         for edge in edges:
             u, v = edge.source.name, edge.target.name
             w = edge.value
-            if distances[u] + edge.value < distances[v]:
+            if distances[u] + w < distances[v]:
                 distances[v] = distances[u] + w
                 predecessor[v] = u
-
     for edge in edges:
         u, v = edge.source.name, edge.target.name
         w = edge.value
